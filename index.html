@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js"></script>
+  <script src="./build/vue-html-to-paper.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/kidlat-css/css/kidlat.css">
+  <title>Vue Html To Paper - Vue mixin for html elements printing.</title>
+</head>
+<body>
+  <div id="app">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">VueHtmlToPaper</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="https://github.com/mycure-inc/vue-html-to-paper">GitHub</span></a>
+            </li>
+        </div>
+      </nav>
+    <div class="container">
+      <div id="printMe" class="row">
+        <div class="col-xs-12 col-md-10 offset-md-1 pt-5">
+          <h1 align="center">MYCURE Pets</h1>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Animal</th>
+                <th>Name</th>
+                <th>Power Lvl 0-100</th>
+                <th>Sound</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Cate</td>
+                <td>Kidlat</td>
+                <td>97</td>
+                <td>Miiiiiiiiiyaaaaw!!!</td>
+              </tr>
+              <tr>
+                <td>Doge</td>
+                <td>Cure</td>
+                <td>80</td>
+                <td>Nggggggggggggrraw!!!</td>
+              </tr>
+              <tr>
+                <td>Doge</td>
+                <td>Pickle</td>
+                <td>79</td>
+                <td>Aaaaaaw!!! *high pitch*</td>
+              </tr>
+              <tr>
+                <td>Doge</td>
+                <td>V3</td>
+                <td>90</td>
+                <td>Raaaaw!!! *high pitch*</td>
+              </tr>
+              <tr>
+                <td>Doge</td>
+                <td>V4</td>
+                <td>40</td>
+                <td>Raaaaw!!! *high pitch x3*</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-md-12 text-center">
+          <button class="btn btn-outline-primary" @click="print">PRINT</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    var options = {
+      name: '_blank',
+      specs: [
+        'fullscreen=yes',
+        'titlebar=yes',
+        'scrollbars=yes'
+      ],
+      styles: [
+        'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
+        'https://unpkg.com/kidlat-css/css/kidlat.css'
+      ]
+    }
+
+    Vue.use(VueHtmlToPaper, options);
+
+    var vm = new Vue({
+      el: '#app',
+      methods: {
+        print() {
+          vm.$htmlToPaper('printMe');
+        }
+      }
+    });
+  </script>
+</body>
+</html>
