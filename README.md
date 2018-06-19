@@ -3,12 +3,17 @@ Vue mixin for paper printing html elements.
 
 ### Install
 
+**NPM**
 ```
 npm install vue-html-to-paper
 ```
-**Or**
+**Yarn**
 ```
 yarn add vue-html-to-paper
+```
+**CDN**
+```
+https://unpkg.com/vue-html-to-paper/build/vue-html-to-paper.js
 ```
 
 ### Usage
