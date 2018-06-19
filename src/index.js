@@ -19,10 +19,14 @@ const VueHtmlToPaper = {
             replace,
             styles
           } = opts;
-
-          console.log(opts);
-
           specs = !!specs.length ? specs.join(',') : '';
+
+          const element = document.getElementById(el);
+
+          if(!element) {
+            alert(`Element to print #${el} not found!`);
+            return;
+          }
           
           const url = '';
           const win = window.open(url, name, specs, replace);
@@ -33,7 +37,7 @@ const VueHtmlToPaper = {
                 <title>${document.title}</title>
               </head>
               <body>
-                ${document.getElementById(el).innerHTML}
+                ${element.innerHTML}
               </body>
             </html>
           `);
