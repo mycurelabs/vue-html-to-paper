@@ -58,7 +58,7 @@ See `window.open` API [here](https://www.w3schools.com/Jsref/met_win_open.asp).
     <!-- OUTPUT -->
     <button @click="print"></button>
   </div>
-<teplate>
+<template>
 
 <script>
 export default {
