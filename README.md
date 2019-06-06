@@ -70,13 +70,29 @@ export default {
   methods: {
     print() {
       // Pass the element id here
-      this.$htmlToPaper('printMe');
+      this.$htmlToPaper('printMe', () => {
+        console.log('Printing done or got cancelled!');
+      });
     }
   }
 }
 </script>
 ```
 
-You can also pass options to `this.$htmlToPaper('printMe', options);` to override the global options in the `Vue.use(VueHtmlToPaper, options)`.
+### Callback
+
+Use the callback function to know if the printing has been done or got cancelled.
+
+```js
+this.$htmlToPaper('printMe', () => {
+  console.log('Printing done or got cancelled!');
+});
+```
+
+*Deprecated*
+
+> You can no longer pass options in the `$htmlToPaper` methods.
+
+> ~~You can also pass options to `this.$htmlToPaper('printMe', options);` to override the global options in the `Vue.use(VueHtmlToPaper, options)`~~.
 
 Made with ❤️ by Jofferson Ramirez Tiquez
