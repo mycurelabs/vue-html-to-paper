@@ -27,11 +27,12 @@
     "babel-loader": "^7.1.1",
     "babel-preset-env": "^1.6.0",
     "babel-preset-es2015": "^6.24.1",
+    "compression-webpack-plugin": "^1.0.0",
     "css-loader": "^0.28.4",
+    "rollup": "^1.14.2",
     "style-loader": "^0.18.2",
     "uglify-loader": "^2.0.0",
-    "webpack": "^3.5.4",
-    "compression-webpack-plugin": "^1.0.0"
+    "webpack": "^3.5.4"
   },
   "author": "Jofferson Ramirez Tiquez",
   "license": "ISC",
