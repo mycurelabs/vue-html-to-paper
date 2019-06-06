@@ -1,4 +1,4 @@
-function addStyles(win, styles) {
+function addStyles (win, styles) {
   styles.forEach(style => {
     let link = win.document.createElement('link');
     link.setAttribute('rel', 'stylesheet');
@@ -9,16 +9,16 @@ function addStyles(win, styles) {
 }
 
 const VueHtmlToPaper = {
-  install(Vue, options) {
+  install (Vue, options) {
     Vue.mixin({
       methods: {
-        $htmlToPaper(el, opts = options) {
+        $htmlToPaper (el, cb) {
           let {
             name,
             specs,
             replace,
             styles
-          } = opts;
+          } = options;
           specs = !!specs.length ? specs.join(',') : '';
 
           const element = document.getElementById(el);
@@ -49,6 +49,7 @@ const VueHtmlToPaper = {
             win.focus();
             win.print();
             win.close();
+            cb();
           }, 1000);          
           return true;
         }
