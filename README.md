@@ -3,7 +3,7 @@ Vue mixin for paper printing html elements.
 
 ### Demo
 
-https://mycure-inc.github.io/vue-html-to-paper/
+https://mycurelabs.github.io/vue-html-to-paper/
 
 ### Install
 
