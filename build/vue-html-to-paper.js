@@ -15,15 +15,15 @@
   }
 
   const VueHtmlToPaper = {
-    install (Vue, options) {
+    install (Vue, options = {}) {
       Vue.mixin({
         methods: {
-          $htmlToPaper (el, cb) {
+          $htmlToPaper (el, cb = () => true) {
             let {
-              name,
-              specs,
-              replace,
-              styles
+              name = '_blank',
+              specs = ['fullscreen=yes','titlebar=yes', 'scrollbars=yes'],
+              replace = true,
+              styles = []
             } = options;
             specs = !!specs.length ? specs.join(',') : '';
 

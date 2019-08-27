@@ -42,6 +42,10 @@ const options = {
 }
 
 Vue.use(VueHtmlToPaper, options);
+
+// or, using the defaults with no stylesheet
+
+Vue.use(VueHtmlToPaper);
 ```
 
 See `window.open` API [here](https://www.w3schools.com/Jsref/met_win_open.asp).
@@ -70,9 +74,7 @@ export default {
   methods: {
     print() {
       // Pass the element id here
-      this.$htmlToPaper('printMe', () => {
-        console.log('Printing done or got cancelled!');
-      });
+      this.$htmlToPaper('printMe');
     }
   }
 }
@@ -81,18 +83,12 @@ export default {
 
 ### Callback
 
-Use the callback function to know if the printing has been done or got cancelled.
+Use the callback function to be notified when printing has been completed (whether or not it was successful). The callback method is not required.
 
 ```js
 this.$htmlToPaper('printMe', () => {
-  console.log('Printing done or got cancelled!');
+  console.log('Printing completed or was cancelled!');
 });
 ```
-
-*Deprecated*
-
-> You can no longer pass options in the `$htmlToPaper` methods.
-
-> ~~You can also pass options to `this.$htmlToPaper('printMe', options);` to override the global options in the `Vue.use(VueHtmlToPaper, options)`~~.
 
 Made with ❤️ by Jofferson Ramirez Tiquez
