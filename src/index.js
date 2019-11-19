@@ -31,16 +31,16 @@ const VueHtmlToPaper = {
           const url = '';
           const win = window.open(url, name, specs, replace);
 
-          win.document.write(`
-            <html>
-              <head>
-                <title>${document.title}</title>
-              </head>
-              <body>
-                ${element.innerHTML}
-              </body>
-            </html>
-          `);
+          win.document.write(
+            [
+              `<html>`,
+              `<head>`,
+              `<title>${document.title}</title>`,
+              `</head>`,
+              `<body>${element.innerHTML}</body>`,
+              `</html>`
+            ].join("")
+          );
 
           addStyles(win, styles);
 
