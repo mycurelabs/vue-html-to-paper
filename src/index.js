@@ -12,7 +12,7 @@ const VueHtmlToPaper = {
   install (Vue, options = {}) {
     Vue.mixin({
       methods: {
-        $htmlToPaper (el, cb = () => true) {
+        $htmlToPaper (el, cb) {
           let {
             name = '_blank',
             specs = ['fullscreen=yes','titlebar=yes', 'scrollbars=yes'],
@@ -25,9 +25,9 @@ const VueHtmlToPaper = {
 
           if(!element) {
             alert(`Element to print #${el} not found!`);
-            return;
+            return cb ? undefined : Promise.reject();
           }
-          
+
           const url = '';
           const win = window.open(url, name, specs, replace);
 
@@ -43,15 +43,20 @@ const VueHtmlToPaper = {
           `);
 
           addStyles(win, styles);
-          
-          setTimeout(() => {
-            win.document.close();
-            win.focus();
-            win.print();
-            win.close();
-            cb();
-          }, 1000);          
-          return true;
+
+          const promise = new Promise(resolve => {
+            setTimeout(() => {
+              win.document.close();
+              win.focus();
+              win.print();
+              win.close();
+              
+              if (cb) cb();
+              resolve();
+            }, 1000);
+          });
+
+          return cb ? true : promise;
         }
       }
     });
