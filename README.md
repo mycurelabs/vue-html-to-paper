@@ -66,13 +66,13 @@ See `window.open` API [here](https://www.w3schools.com/Jsref/met_win_open.asp).
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       output: null
     }
   },
   methods: {
-    print() {
+    print () {
       // Pass the element id here
       this.$htmlToPaper('printMe');
     }
@@ -90,5 +90,32 @@ this.$htmlToPaper('printMe', () => {
   console.log('Printing completed or was cancelled!');
 });
 ```
+
+### FAQ
+
+**How to print in landscape**
+
+In the global option, you can pass a css with the following: 
+
+```css
+@media print {
+  @page {
+    size: landscape
+  }
+}
+```
+
+Then, inject the custom css in the styles option like so:
+
+```js
+const options = {
+  styles: [
+    'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
+    './path/to/custom.css' // <- inject here
+  ]
+}
+```
+
+I thought that this should be a local option instead of global. Will update the functionality in the future. See [#36](https://github.com/mycurelabs/vue-html-to-paper/issues/36)
 
 Made with ❤️ by Jofferson Ramirez Tiquez
