@@ -54,7 +54,8 @@
           win.print();
           win.close();
           cb();
-        }, 1000);          
+        }, 1000);
+          
         return true;
       };
     }
