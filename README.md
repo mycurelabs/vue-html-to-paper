@@ -44,7 +44,6 @@ const options = {
 Vue.use(VueHtmlToPaper, options);
 
 // or, using the defaults with no stylesheet
-
 Vue.use(VueHtmlToPaper);
 ```
 
@@ -81,12 +80,20 @@ export default {
 </script>
 ```
 
+### With local options
+
+You can also 
+
 ### Callback
 
 Use the callback function to be notified when printing has been completed (whether or not it was successful). The callback method is not required.
 
+**Notes**
+
+> When using callback, be aware that there's now a 2nd argument for local options. So the callback will be the 3rd arg. Pass `null` as 2nd arg if you don't want to override the global options.
+
 ```js
-this.$htmlToPaper('printMe', () => {
+this.$htmlToPaper('printMe', null, () => {
   console.log('Printing completed or was cancelled!');
 });
 ```
@@ -116,6 +123,6 @@ const options = {
 }
 ```
 
-I thought that this should be a local option instead of global. Will update the functionality in the future. See [#36](https://github.com/mycurelabs/vue-html-to-paper/issues/36)
+This can also be done by using the local option.
 
 Made with ❤️ by Jofferson Ramirez Tiquez
