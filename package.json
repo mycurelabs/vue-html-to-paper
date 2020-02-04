@@ -9,7 +9,8 @@
     "prebuild:rollup": "rm -rf build",
     "build:webpack": "webpack --progress --hide-modules",
     "build:rollup": "rollup -c",
-    "build:all": "npm run build:webpack && npm run build:rollup"
+    "build:all": "npm run build:webpack && npm run build:rollup",
+    "build": "npm run build:all"
   },
   "repository": {
     "type": "git",
