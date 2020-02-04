@@ -2,7 +2,7 @@
   "name": "vue-html-to-paper",
   "version": "1.2.0",
   "description": "Vue mixin for printing html elements to paper.",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prebuild:webpack": "rm -rf dist",
