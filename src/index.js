@@ -10,51 +10,64 @@ function addStyles (win, styles) {
 
 const VueHtmlToPaper = {
   install (Vue, options = {}) {
-    Vue.mixin({
-      methods: {
-        $htmlToPaper (el, cb = () => true) {
-          let {
-            name = '_blank',
-            specs = ['fullscreen=yes','titlebar=yes', 'scrollbars=yes'],
-            replace = true,
-            styles = []
-          } = options;
-          specs = !!specs.length ? specs.join(',') : '';
+    Vue.prototype.$htmlToPaper = (el, localOptions, cb = () => true) => {
+      let defaultName = '_blank', 
+          defaultSpecs = ['fullscreen=yes','titlebar=yes', 'scrollbars=yes'],
+          defaultReplace = true,
+          defaultStyles = []
+      let {
+        name = defaultName,
+        specs = defaultSpecs,
+        replace = defaultReplace,
+        styles = defaultStyles
+      } = options;
 
-          const element = document.getElementById(el);
-
-          if(!element) {
-            alert(`Element to print #${el} not found!`);
-            return;
-          }
-          
-          const url = '';
-          const win = window.open(url, name, specs, replace);
-
-          win.document.write(`
-            <html>
-              <head>
-                <title>${document.title}</title>
-              </head>
-              <body>
-                ${element.innerHTML}
-              </body>
-            </html>
-          `);
-
-          addStyles(win, styles);
-          
-          setTimeout(() => {
-            win.document.close();
-            win.focus();
-            win.print();
-            win.close();
-            cb();
-          }, 1000);          
-          return true;
-        }
+      // If has localOptions
+      // TODO: improve logic
+      if (!!localOptions) {
+        if (localOptions.name) name = localOptions.name;
+        if (localOptions.specs) specs = localOptions.specs;
+        if (localOptions.replace) replace = localOptions.replace;
+        if (localOptions.styles) styles = localOptions.styles;
       }
-    });
+
+      console.warn(styles);
+
+      specs = !!specs.length ? specs.join(',') : '';
+
+      const element = document.getElementById(el);
+
+      if (!element) {
+        alert(`Element to print #${el} not found!`);
+        return;
+      }
+      
+      const url = '';
+      const win = window.open(url, name, specs, replace);
+
+      win.document.write(`
+        <html>
+          <head>
+            <title>${document.title}</title>
+          </head>
+          <body>
+            ${element.innerHTML}
+          </body>
+        </html>
+      `);
+
+      addStyles(win, styles);
+      
+      setTimeout(() => {
+        win.document.close();
+        win.focus();
+        win.print();
+        win.close();
+        cb();
+      }, 1000);
+        
+      return true;
+    };
   }
 }
 
