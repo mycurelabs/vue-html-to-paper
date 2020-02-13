@@ -12,14 +12,14 @@
 </head>
 <body>
   <div id="app">
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">VueHtmlToPaper</a>
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="https://github.com/mycure-inc/vue-html-to-paper">GitHub</span></a>
-          </li>
-        </ul>
-      </nav>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">VueHtmlToPaper</a>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="https://github.com/mycure-inc/vue-html-to-paper">GitHub</span></a>
+        </li>
+      </ul>
+    </nav>
     <div class="container">
       <div id="printMe" class="row">
         <div class="col-xs-12 col-md-10 offset-md-1 pt-5">
@@ -71,8 +71,20 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-xs-12 col-md-12 text-center">
-          <button class="btn btn-outline-primary" @click="print">PRINT</button>
+        <div class="col-xs-12 col-md-10 offset-md-1 mb-5">
+          <h4>Default Global Options</h4>
+          <pre>{{globalOptions}}</pre>
+          <button class="btn btn-outline-primary" @click="print">PRINT PORTRAIT</button>
+        </div>
+        <div class="col-xs-12 col-md-10 offset-md-1 mb-5">
+          <h4>With Custom CSS</h4>
+          <p>With custom local css to override the global options. This will print the table on landscape mode.</p>
+          <pre>{{localLandScapeOptions}}</pre>
+          <button class="btn btn-outline-primary" @click="printLandscape">PRINT LANDSCAPE</button>
+        </div>
+        <div class="col-xs-12 col-md-10 offset-md-1 mb-5">
+          <h4>Remove styles</h4>
+          <button class="btn btn-outline-primary" @click="printNoStyles">PRINT NO STYLES</button>
         </div>
       </div>
     </div>
@@ -95,10 +107,53 @@
 
     var vm = new Vue({
       el: '#app',
+      data () {
+        return {
+          globalOptions: {
+            name: '_blank',
+            specs: [
+              'fullscreen=yes',
+              'titlebar=yes',
+              'scrollbars=yes'
+            ],
+            styles: [
+              'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
+              'https://unpkg.com/kidlat-css/css/kidlat.css'
+            ]
+          },
+          localLandScapeOptions: {
+            styles: [
+              'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
+              'https://unpkg.com/kidlat-css/css/kidlat.css',
+              './landscape.css'
+            ]
+          }
+        }
+      },
       methods: {
         print () {
-          vm.$htmlToPaper('printMe', () => {
+          vm.$htmlToPaper('printMe', null, () => {
             console.warn('done');
+          });
+        },
+        printLandscape () {
+          const localOptions = {
+            styles: [
+              'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
+              'https://unpkg.com/kidlat-css/css/kidlat.css',
+              './landscape.css'
+            ]
+          };
+          vm.$htmlToPaper('printMe', localOptions, () => {
+            console.warn('done landscape');
+          });
+        },
+        printNoStyles () {
+          const localOptions = {
+            styles: []
+          };
+          vm.$htmlToPaper('printMe', localOptions, () => {
+            console.warn('done no styles');
           });
         }
       }
