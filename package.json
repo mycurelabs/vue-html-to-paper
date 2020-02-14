@@ -33,6 +33,7 @@
     "rollup": "^1.14.2",
     "style-loader": "^0.18.2",
     "uglify-loader": "^2.0.0",
+    "vue": "^2.6.11",
     "webpack": "^3.5.4"
   },
   "author": "Jofferson Ramirez Tiquez",
