@@ -31,11 +31,9 @@ const VueHtmlToPaper = {
         if (localOptions.styles) styles = localOptions.styles;
       }
 
-      console.warn(styles);
-
       specs = !!specs.length ? specs.join(',') : '';
 
-      const element = document.getElementById(el);
+      const element = window.document.getElementById(el);
 
       if (!element) {
         alert(`Element to print #${el} not found!`);
@@ -48,7 +46,7 @@ const VueHtmlToPaper = {
       win.document.write(`
         <html>
           <head>
-            <title>${document.title}</title>
+            <title>${window.document.title}</title>
           </head>
           <body>
             ${element.innerHTML}
