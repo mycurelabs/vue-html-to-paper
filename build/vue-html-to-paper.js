@@ -37,8 +37,6 @@
           if (localOptions.styles) styles = localOptions.styles;
         }
 
-        console.warn(styles);
-
         specs = !!specs.length ? specs.join(',') : '';
 
         const element = document.getElementById(el);
