@@ -1,4 +1,4 @@
-# vue-html-to-paper
+# HTML to Paper work 
 Vue mixin for paper printing html elements.
 
 ### Demo
