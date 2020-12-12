@@ -1,4 +1,4 @@
-function addStyles (win, styles) {
+function addStyles(win, styles) {
   styles.forEach(style => {
     let link = win.document.createElement('link');
     link.setAttribute('rel', 'stylesheet');
@@ -9,12 +9,12 @@ function addStyles (win, styles) {
 }
 
 const VueHtmlToPaper = {
-  install (Vue, options = {}) {
+  install(Vue, options = {}) {
     Vue.prototype.$htmlToPaper = (el, localOptions, cb = () => true) => {
-      let defaultName = '_blank', 
-          defaultSpecs = ['fullscreen=yes','titlebar=yes', 'scrollbars=yes'],
-          defaultReplace = true,
-          defaultStyles = []
+      let defaultName = '_blank',
+        defaultSpecs = ['fullscreen=yes', 'titlebar=yes', 'scrollbars=yes'],
+        defaultReplace = true,
+        defaultStyles = []
       let {
         name = defaultName,
         specs = defaultSpecs,
@@ -32,14 +32,15 @@ const VueHtmlToPaper = {
       }
 
       specs = !!specs.length ? specs.join(',') : '';
-
-      const element = window.document.getElementById(el);
-
+      const element = el;
+      if (typeof el === 'string' || el instanceof String) {
+        const element = window.document.getElementById(el);
+      }
       if (!element) {
         alert(`Element to print #${el} not found!`);
         return;
       }
-      
+
       const url = '';
       const win = window.open(url, name, specs, replace);
 
@@ -55,7 +56,7 @@ const VueHtmlToPaper = {
       `);
 
       addStyles(win, styles);
-      
+
       setTimeout(() => {
         win.document.close();
         win.focus();
@@ -63,7 +64,7 @@ const VueHtmlToPaper = {
         win.close();
         cb();
       }, 1000);
-        
+
       return true;
     };
   }
