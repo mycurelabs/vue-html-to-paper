@@ -17,7 +17,7 @@
   const VueHtmlToPaper = {
     install (Vue, options = {}) {
       Vue.prototype.$htmlToPaper = (el, localOptions, cb = () => true) => {
-        let defaultName = '_blank', 
+        let defaultName = '_blank',
             defaultSpecs = ['fullscreen=yes','titlebar=yes', 'scrollbars=yes'],
             defaultReplace = true,
             defaultStyles = [];
@@ -39,7 +39,7 @@
 
         specs = !!specs.length ? specs.join(',') : '';
 
-        const element = document.getElementById(el);
+        const element = window.document.getElementById(el);
 
         if (!element) {
           alert(`Element to print #${el} not found!`);
@@ -52,7 +52,7 @@
         win.document.write(`
         <html>
           <head>
-            <title>${document.title}</title>
+            <title>${window.document.title}</title>
           </head>
           <body>
             ${element.innerHTML}
@@ -61,14 +61,15 @@
       `);
 
         addStyles(win, styles);
-        
-        setTimeout(() => {
-          win.document.close();
-          win.focus();
-          win.print();
+
+        win.addEventListener("afterprint", function () {
           win.close();
-          cb();
-        }, 1000);
+        });
+
+        win.document.close();
+        win.focus();
+        win.print();
+        cb();
           
         return true;
       };

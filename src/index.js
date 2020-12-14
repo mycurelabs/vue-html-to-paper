@@ -11,7 +11,7 @@ function addStyles (win, styles) {
 const VueHtmlToPaper = {
   install (Vue, options = {}) {
     Vue.prototype.$htmlToPaper = (el, localOptions, cb = () => true) => {
-      let defaultName = '_blank', 
+      let defaultName = '_blank',
           defaultSpecs = ['fullscreen=yes','titlebar=yes', 'scrollbars=yes'],
           defaultReplace = true,
           defaultStyles = []
@@ -55,14 +55,15 @@ const VueHtmlToPaper = {
       `);
 
       addStyles(win, styles);
-      
-      setTimeout(() => {
-        win.document.close();
-        win.focus();
-        win.print();
+
+      win.addEventListener("afterprint", function () {
         win.close();
-        cb();
-      }, 1000);
+      });
+
+      win.document.close();
+      win.focus();
+      win.print();
+      cb();
         
       return true;
     };
