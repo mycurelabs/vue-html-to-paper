@@ -1,3 +1,12 @@
+## Changelog
+
+## 1.3.2
+
+- Avoids to call window close before content is loaded
+
+<br>
+<hr/>
+
 # Vue HTML to Paper
 Vue mixin for paper printing html elements.
 
