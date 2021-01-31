@@ -21,7 +21,7 @@
             defaultSpecs = ['fullscreen=yes','titlebar=yes', 'scrollbars=yes'],
             defaultReplace = true,
             defaultStyles = [],
-            defaultTimeout = 10000;
+            defaultTimeout = 1000;
         let {
           name = defaultName,
           specs = defaultSpecs,
