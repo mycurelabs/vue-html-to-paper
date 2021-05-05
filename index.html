@@ -86,6 +86,10 @@
           <h4>Remove styles</h4>
           <button class="btn btn-outline-primary" @click="printNoStyles">PRINT NO STYLES</button>
         </div>
+        <div class="col-xs-12 col-md-10 offset-md-1 mb-5">
+          <h4>Turn off automatic closing after print</h4>
+          <button class="btn btn-outline-primary" @click="printAutoCloseOff">AUTO CLOSE OFF</button>
+        </div>
       </div>
     </div>
   </div>
@@ -100,7 +104,7 @@
       styles: [
         'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
         'https://unpkg.com/kidlat-css/css/kidlat.css'
-      ]
+      ],
     };
 
     Vue.use(VueHtmlToPaper, options);
@@ -119,7 +123,8 @@
             styles: [
               'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
               'https://unpkg.com/kidlat-css/css/kidlat.css'
-            ]
+            ],
+            autoClose: true,
           },
           localLandScapeOptions: {
             styles: [
@@ -155,8 +160,16 @@
           vm.$htmlToPaper('printMe', localOptions, () => {
             console.warn('done no styles');
           });
-        }
-      }
+        },
+        printAutoCloseOff () {
+          const localOptions = {
+            autoClose: false,
+          };
+          vm.$htmlToPaper('printMe', localOptions, () => {
+            console.warn('done');
+          });
+        },
+      },
     });
   </script>
 </body>
