@@ -1,8 +1,8 @@
-export default {
+module.exports = {
   input: 'src/index.js',
   output: {
     file: 'build/vue-html-to-paper.js',
     name: 'VueHtmlToPaper',
-    format: 'umd'
-  }
+    format: 'umd',
+  },
 };
