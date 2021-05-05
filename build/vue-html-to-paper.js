@@ -1,68 +1,73 @@
-function addStyles (win, styles) {
-  styles.forEach(style => {
-    let link = win.document.createElement('link');
-    link.setAttribute('rel', 'stylesheet');
-    link.setAttribute('type', 'text/css');
-    link.setAttribute('href', style);
-    win.document.getElementsByTagName('head')[0].appendChild(link);
-  });
-}
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+  typeof define === 'function' && define.amd ? define(factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.VueHtmlToPaper = factory());
+}(this, (function () { 'use strict';
 
-const VueHtmlToPaper = {
-  install (Vue, options = {}) {
-    Vue.prototype.$htmlToPaper = (el, localOptions, cb = () => true) => {
-      let defaultName = '_blank', 
+  const addStyles = (win, styles) => {
+    styles.forEach((style) => {
+      let link = win.document.createElement('link');
+      link.setAttribute('rel', 'stylesheet');
+      link.setAttribute('type', 'text/css');
+      link.setAttribute('href', style);
+      win.document.getElementsByTagName('head')[0].appendChild(link);
+    });
+  };
+
+  const VueHtmlToPaper = {
+    install (Vue, options = {}) {
+      Vue.prototype.$htmlToPaper = (el, localOptions, cb = () => true) => {
+        let defaultName = '_blank', 
           defaultSpecs = ['fullscreen=yes','titlebar=yes', 'scrollbars=yes'],
-          defaultStyles = [],
-          defaultTimeout = 1000;
-      let {
-        name = defaultName,
-        specs = defaultSpecs,
-        styles = defaultStyles,
-        timeout = defaultTimeout
-      } = options;
+          defaultStyles = [];
+        let {
+          name = defaultName,
+          specs = defaultSpecs,
+          styles = defaultStyles,
+        } = options;
 
-      if (localOptions?.name) name = localOptions.name;
-      if (localOptions?.specs) specs = localOptions.specs;
-      if (localOptions?.styles) styles = localOptions.styles;
-      if (localOptions?.timeout) timeout = localOptions.timeout;
+        if (localOptions?.name) name = localOptions.name;
+        if (localOptions?.specs) specs = localOptions.specs;
+        if (localOptions?.styles) styles = localOptions.styles;
 
-      specs = !!specs.length ? specs.join(',') : '';
+        specs = !!specs.length ? specs.join(',') : '';
 
-      const element = window.document.getElementById(el);
+        const element = window.document.getElementById(el);
 
-      if (!element) {
-        alert(`Element to print #${el} not found!`);
-        return;
-      }
-      
-      const url = '';
-      const win = window.open(url, name, specs);
-
-      win.document.write(`
-      <html>
-        <head>
-          <title>${window.document.title}</title>
-        </head>
-        <body>
-          ${element.innerHTML}
-        </body>
-      </html>
-    `);
-
-      addStyles(win, styles);
-      
-      setTimeout(() => {
-        win.document.close();
-        win.focus();
-        win.print();
-        win.close();
-        cb();
-      }, timeout);
+        if (!element) {
+          alert(`Element to print #${el} not found!`);
+          return;
+        }
         
-      return true;
-    };
-  },
-};
+        const url = '';
+        const win = window.open(url, name, specs);
 
-export default VueHtmlToPaper;
+        win.document.write(`
+        <html>
+          <head>
+            <title>${window.document.title}</title>
+          </head>
+          <body>
+            ${element.innerHTML}
+          </body>
+        </html>
+      `);
+
+        addStyles(win, styles);
+        
+        setTimeout(() => {
+          win.document.close();
+          win.focus();
+          win.print();
+          win.close();
+          cb();
+        }, 1000);
+          
+        return true;
+      };
+    },
+  };
+
+  return VueHtmlToPaper;
+
+})));
