@@ -38,13 +38,15 @@
 
         specs = !!specs.length ? specs.join(',') : '';
 
-        const element = window.document.getElementById(el);
-
+        let element = el;
+        if (typeof el === 'string' || el instanceof String) {
+          element = window.document.getElementById(el);
+        }
         if (!element) {
           alert(`Element to print #${el} not found!`);
           return;
         }
-        
+
         const url = '';
         const win = window.open(url, name, specs);
 
@@ -61,17 +63,18 @@
 
         addStyles(win, styles);
 
-        console.warn(timeout, autoClose);
-        
-        setTimeout(() => {
-          win.focus();
-          win.print();
-          autoClose && win.document.close();
-          autoClose && win.close();
-          cb();
-        }, timeout);
-          
-        return true;
+        const promise = new Promise((resolve) => {
+          setTimeout(() => {
+            win.focus();
+            win.print();
+            autoClose && win.document.close();
+            autoClose && win.close();
+            if (cb) cb();
+            resolve();
+          }, 1000);
+        });
+
+        return cb ? true : promise;
       };
     },
   };
