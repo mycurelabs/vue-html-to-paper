@@ -9,7 +9,7 @@ const addStyles = (win, styles) => {
 };
 
 const VueHtmlToPaper = {
-  install (Vue, options = {}) {
+  install(Vue, options = {}) {
     Vue.prototype.$htmlToPaper = (el, localOptions, cb = () => true) => {
       let defaultName = '_blank', 
         defaultSpecs = ['fullscreen=yes','titlebar=yes', 'scrollbars=yes'],
@@ -32,13 +32,15 @@ const VueHtmlToPaper = {
 
       specs = !!specs.length ? specs.join(',') : '';
 
-      const element = window.document.getElementById(el);
-
+      let element = el;
+      if (typeof el === 'string' || el instanceof String) {
+        element = window.document.getElementById(el);
+      }
       if (!element) {
         alert(`Element to print #${el} not found!`);
         return;
       }
-      
+
       const url = '';
       const win = window.open(url, name, specs);
 
@@ -54,15 +56,15 @@ const VueHtmlToPaper = {
       `);
 
       addStyles(win, styles);
-      
+
       setTimeout(() => {
         win.focus();
         win.print();
         autoClose && win.document.close();
         autoClose && win.close();
         cb();
-      }, timeout);
-        
+      }, 1000);
+
       return true;
     };
   },
