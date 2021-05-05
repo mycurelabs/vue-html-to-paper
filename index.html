@@ -88,7 +88,11 @@
         </div>
         <div class="col-xs-12 col-md-10 offset-md-1 mb-5">
           <h4>Turn off automatic closing after print</h4>
-          <button class="btn btn-outline-primary" @click="printAutoCloseOff">AUTO CLOSE OFF</button>
+          <button class="btn btn-outline-primary" @click="printAutoCloseOff">PRINT AUTO CLOSE OFF</button>
+        </div>
+        <div class="col-xs-12 col-md-10 offset-md-1 mb-5">
+          <h4>Async</h4>
+          <button class="btn btn-outline-primary" @click="printAsync">PRINT ASYNC</button>
         </div>
       </div>
     </div>
@@ -168,6 +172,10 @@
           vm.$htmlToPaper('printMe', localOptions, () => {
             console.warn('done');
           });
+        },
+        async printAsync () {
+          await vm.$htmlToPaper('printMe');
+          console.warn('done async');
         },
       },
     });
