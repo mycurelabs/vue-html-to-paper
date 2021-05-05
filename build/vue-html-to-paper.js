@@ -20,12 +20,14 @@
         let defaultName = '_blank', 
             defaultSpecs = ['fullscreen=yes','titlebar=yes', 'scrollbars=yes'],
             defaultReplace = true,
-            defaultStyles = [];
+            defaultStyles = [],
+            defaultTimeout = 1000;
         let {
           name = defaultName,
           specs = defaultSpecs,
           replace = defaultReplace,
-          styles = defaultStyles
+          styles = defaultStyles,
+          timeout = defaultTimeout
         } = options;
 
         // If has localOptions
@@ -35,6 +37,7 @@
           if (localOptions.specs) specs = localOptions.specs;
           if (localOptions.replace) replace = localOptions.replace;
           if (localOptions.styles) styles = localOptions.styles;
+          if (localOptions.timeout) timeout = localOptions.timeout;
         }
 
         specs = !!specs.length ? specs.join(',') : '';
@@ -68,7 +71,7 @@
           win.print();
           win.close();
           cb();
-        }, 1000);
+        }, timeout);
           
         return true;
       };
