@@ -9,7 +9,7 @@ const addStyles = (win, styles) => {
 };
 
 const VueHtmlToPaper = {
-  install(Vue, options = {}) {
+  install (Vue, options = {}) {
     Vue.prototype.$htmlToPaper = (el, localOptions, cb = () => true) => {
       let defaultName = '_blank', 
         defaultSpecs = ['fullscreen=yes','titlebar=yes', 'scrollbars=yes'],
@@ -57,15 +57,18 @@ const VueHtmlToPaper = {
 
       addStyles(win, styles);
 
-      setTimeout(() => {
-        win.focus();
-        win.print();
-        autoClose && win.document.close();
-        autoClose && win.close();
-        cb();
-      }, 1000);
+      const promise = new Promise((resolve) => {
+        setTimeout(() => {
+          win.focus();
+          win.print();
+          autoClose && win.document.close();
+          autoClose && win.close();
+          if (cb) cb();
+          resolve();
+        }, 1000);
+      });
 
-      return true;
+      return cb ? true : promise;
     };
   },
 };
