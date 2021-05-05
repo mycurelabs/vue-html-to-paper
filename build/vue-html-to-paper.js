@@ -21,13 +21,15 @@
           defaultSpecs = ['fullscreen=yes','titlebar=yes', 'scrollbars=yes'],
           defaultStyles = [],
           defaultTimeout = 1000,
-          defaultAutoClose = true;
+          defaultAutoClose = true,
+          defaultWindowTitle = window.document.title;
         let {
           name = defaultName,
           specs = defaultSpecs,
           styles = defaultStyles,
           timeout = defaultTimeout,
           autoClose = defaultAutoClose,
+          windowTitle = defaultWindowTitle,
         } = options;
 
         if (localOptions?.name) name = localOptions.name;
@@ -35,6 +37,7 @@
         if (localOptions?.styles) styles = localOptions.styles;
         if (localOptions?.timeout) timeout = localOptions.timeout;
         if (localOptions?.autoClose) autoClose = localOptions.autoClose;
+        if (localOptions?.windowTitle) windowTitle = localOptions.windowTitle;
 
         specs = !!specs.length ? specs.join(',') : '';
 
@@ -53,7 +56,7 @@
         win.document.write(`
         <html>
           <head>
-            <title>${window.document.title}</title>
+            <title>${windowTitle}</title>
           </head>
           <body>
             ${element.innerHTML}
@@ -71,7 +74,7 @@
             autoClose && win.close();
             if (cb) cb();
             resolve();
-          }, 1000);
+          }, timeout);
         });
 
         return cb ? true : promise;
