@@ -13,16 +13,22 @@ const VueHtmlToPaper = {
     Vue.prototype.$htmlToPaper = (el, localOptions, cb = () => true) => {
       let defaultName = '_blank', 
         defaultSpecs = ['fullscreen=yes','titlebar=yes', 'scrollbars=yes'],
-        defaultStyles = [];
+        defaultStyles = [],
+        defaultTimeout = 1000,
+        defaultAutoClose = true;
       let {
         name = defaultName,
         specs = defaultSpecs,
         styles = defaultStyles,
+        timeout = defaultTimeout,
+        autoClose = defaultAutoClose,
       } = options;
 
       if (localOptions?.name) name = localOptions.name;
       if (localOptions?.specs) specs = localOptions.specs;
       if (localOptions?.styles) styles = localOptions.styles;
+      if (localOptions?.timeout) timeout = localOptions.timeout;
+      if (localOptions?.autoClose) autoClose = localOptions.autoClose;
 
       specs = !!specs.length ? specs.join(',') : '';
 
@@ -50,12 +56,12 @@ const VueHtmlToPaper = {
       addStyles(win, styles);
       
       setTimeout(() => {
-        win.document.close();
         win.focus();
         win.print();
-        win.close();
+        autoClose && win.document.close();
+        autoClose && win.close();
         cb();
-      }, 1000);
+      }, timeout);
         
       return true;
     };
