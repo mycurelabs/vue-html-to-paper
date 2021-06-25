@@ -1,1 +1,83 @@
-(()=>{"use strict";var e={d:(t,n)=>{for(var o in n)e.o(n,o)&&!e.o(t,o)&&Object.defineProperty(t,o,{enumerable:!0,get:n[o]})},o:(e,t)=>Object.prototype.hasOwnProperty.call(e,t),r:e=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})}},t={};e.r(t),e.d(t,{default:()=>o});var n=function(e,t){t.forEach((function(t){var n=e.document.createElement("link");n.setAttribute("rel","stylesheet"),n.setAttribute("type","text/css"),n.setAttribute("href",t),e.document.getElementsByTagName("head")[0].appendChild(n)}))};const o={install:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{};e.prototype.$htmlToPaper=function(e,o){var l=arguments.length>2&&void 0!==arguments[2]?arguments[2]:function(){return!0},i="_blank",r=["fullscreen=yes","titlebar=yes","scrollbars=yes"],u=[],s=1e3,a=!0,d=window.document.title,c=t.name,m=void 0===c?i:c,y=t.specs,f=void 0===y?r:y,p=t.styles,v=void 0===p?u:p,b=t.timeout,w=void 0===b?s:b,h=t.autoClose,g=void 0===h?a:h,T=t.windowTitle,P=void 0===T?d:T;null!=o&&o.name&&(m=o.name),null!=o&&o.specs&&(f=o.specs),null!=o&&o.styles&&(v=o.styles),null!=o&&o.timeout&&(w=o.timeout),null!=o&&o.autoClose&&(g=o.autoClose),null!=o&&o.windowTitle&&(P=o.windowTitle),f=f.length?f.join(","):"";var S=e;if(("string"==typeof e||e instanceof String)&&(S=window.document.getElementById(e)),S){var j="",E=window.open(j,m,f);E.document.write("\n        <html>\n          <head>\n            <title>".concat(P,"</title>\n          </head>\n          <body>\n            ").concat(S.innerHTML,"\n          </body>\n        </html>\n      ")),n(E,v);var O=new Promise((function(e){setTimeout((function(){E.focus(),E.print(),g&&E.document.close(),g&&E.close(),l&&l(),e()}),w)}));return!!l||O}alert("Element to print #".concat(e," not found!"))}}};module.exports.VueHtmlToPaper=t})();
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+const addStyles = (win, styles) => {
+  styles.forEach((style) => {
+    let link = win.document.createElement('link');
+    link.setAttribute('rel', 'stylesheet');
+    link.setAttribute('type', 'text/css');
+    link.setAttribute('href', style);
+    win.document.getElementsByTagName('head')[0].appendChild(link);
+  });
+};
+
+const VueHtmlToPaper = {
+  install (Vue, options = {}) {
+    Vue.prototype.$htmlToPaper = (el, localOptions, cb = () => true) => {
+      let defaultName = '_blank', 
+        defaultSpecs = ['fullscreen=yes','titlebar=yes', 'scrollbars=yes'],
+        defaultStyles = [],
+        defaultTimeout = 1000,
+        defaultAutoClose = true,
+        defaultWindowTitle = window.document.title;
+      let {
+        name = defaultName,
+        specs = defaultSpecs,
+        styles = defaultStyles,
+        timeout = defaultTimeout,
+        autoClose = defaultAutoClose,
+        windowTitle = defaultWindowTitle,
+      } = options;
+
+      if (localOptions?.name) name = localOptions.name;
+      if (localOptions?.specs) specs = localOptions.specs;
+      if (localOptions?.styles) styles = localOptions.styles;
+      if (localOptions?.timeout) timeout = localOptions.timeout;
+      if (localOptions?.autoClose) autoClose = localOptions.autoClose;
+      if (localOptions?.windowTitle) windowTitle = localOptions.windowTitle;
+
+      specs = !!specs.length ? specs.join(',') : '';
+
+      let element = el;
+      if (typeof el === 'string' || el instanceof String) {
+        element = window.document.getElementById(el);
+      }
+      if (!element) {
+        alert(`Element to print #${el} not found!`);
+        return;
+      }
+
+      const url = '';
+      const win = window.open(url, name, specs);
+
+      win.document.write(`
+        <html>
+          <head>
+            <title>${windowTitle}</title>
+          </head>
+          <body>
+            ${element.innerHTML}
+          </body>
+        </html>
+      `);
+
+      addStyles(win, styles);
+
+      const promise = new Promise((resolve) => {
+        setTimeout(() => {
+          win.focus();
+          win.print();
+          autoClose && win.document.close();
+          autoClose && win.close();
+          if (cb) cb();
+          resolve();
+        }, timeout);
+      });
+
+      return cb ? true : promise;
+    };
+  },
+};
+
+exports.default = VueHtmlToPaper;
