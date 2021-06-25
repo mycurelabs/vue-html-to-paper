@@ -11,7 +11,7 @@
     "build:webpack": "webpack --progress",
     "build:rollup": "rollup -c",
     "build:all": "npm run build:webpack && npm run build:rollup",
-    "build": "npm run build:all"
+    "build": "npm run build:rollup"
   },
   "repository": {
     "type": "git",
