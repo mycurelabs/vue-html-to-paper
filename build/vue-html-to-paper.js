@@ -16,7 +16,7 @@
 
   const VueHtmlToPaper = {
     install (Vue, options = {}) {
-      Vue.prototype.$htmlToPaper = (el, localOptions, cb = () => true) => {
+      Vue.prototype.$htmlToPaper = (el, localOptions = {}, cb = () => true) => {
         let defaultName = '_blank', 
           defaultSpecs = ['fullscreen=yes','titlebar=yes', 'scrollbars=yes'],
           defaultStyles = [],
@@ -31,13 +31,13 @@
           autoClose = defaultAutoClose,
           windowTitle = defaultWindowTitle,
         } = options;
-
-        if (localOptions?.name) name = localOptions.name;
-        if (localOptions?.specs) specs = localOptions.specs;
-        if (localOptions?.styles) styles = localOptions.styles;
-        if (localOptions?.timeout) timeout = localOptions.timeout;
-        if (localOptions?.autoClose) autoClose = localOptions.autoClose;
-        if (localOptions?.windowTitle) windowTitle = localOptions.windowTitle;
+        
+        if (localOptions.name) name = localOptions.name;
+        if (localOptions.specs) specs = localOptions.specs;
+        if (localOptions.styles) styles = localOptions.styles;
+        if (localOptions.timeout) timeout = localOptions.timeout;
+        if (localOptions.autoClose) autoClose = localOptions.autoClose;
+        if (localOptions.windowTitle) windowTitle = localOptions.windowTitle;
 
         specs = !!specs.length ? specs.join(',') : '';
 
