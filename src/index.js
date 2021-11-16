@@ -28,12 +28,14 @@ const VueHtmlToPaper = {
       let defaultName = '_blank', 
         defaultSpecs = ['fullscreen=yes','titlebar=yes', 'scrollbars=yes'],
         defaultReplace = true,
-        defaultStyles = [];
+        defaultStyles = [],
+        defaultAutoClose = true;
       let {
         name = defaultName,
         specs = defaultSpecs,
         replace = defaultReplace,
         styles = defaultStyles,
+        autoClose = defaultAutoClose,
       } = options;
 
       // If has localOptions
@@ -43,6 +45,7 @@ const VueHtmlToPaper = {
         if (localOptions.specs) specs = localOptions.specs;
         if (localOptions.replace) replace = localOptions.replace;
         if (localOptions.styles) styles = localOptions.styles;
+        if (localOptions.autoClose) autoClose = localOptions.autoClose;
       }
 
       specs = !!specs.length ? specs.join(',') : '';
@@ -74,6 +77,8 @@ const VueHtmlToPaper = {
         win.document.close();
         win.focus();
         win.print();
+        autoClose && win.document.close();
+        autoClose && win.close();
         setTimeout(function () {window.close();}, 1);
         cb();
       }, 1000);
