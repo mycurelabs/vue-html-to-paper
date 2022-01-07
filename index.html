@@ -68,6 +68,51 @@
               </tbody>
             </table>
           </div>
+          <div class="mb-2">
+            <h5>Input Text:</h5>
+            <input type="text" v-model="inputText">
+          </div>
+          <div class="mb-2">
+            <h5>Input Checkbox:</h5>
+            <input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
+            <label for="jack">Jack</label>
+            <input type="checkbox" id="john" value="John" v-model="checkedNames">
+            <label for="john">John</label>
+            <input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
+            <label for="mike">Mike</label>
+            <br>
+            <span>Checked names: {{ checkedNames }}</span>
+          </div>
+          <div class="mb-2">
+            <h5>Input Radio:</h5>
+            <br>
+            <input type="radio" id="one" value="One" v-model="picked">
+            <label for="one">One</label>
+            <br>
+            <input type="radio" id="two" value="Two" v-model="picked">
+            <label for="two">Two</label>
+            <br>
+            <input type="radio" id="disabled" value="Disabled" v-model="picked" :disabled="disabled">
+            <label for="disabled">Disabled</label>
+            <button @click="disabled = !disabled">change Disabled</button>
+            <br>
+            <span>Picked: {{ picked }}</span>
+          </div>
+          <div class="mb-2">
+            <h5>Select:</h5>
+            <select v-model="selected">
+              <option v-for="option in options" v-bind:value="option.value">
+                {{ option.text }}
+              </option>
+            </select>
+            <span>Selected: {{ selected }}</span>
+          </div>
+          <div class="mb-2">
+            <h5>Custom test TextArea:</h5>
+            <span>Multiline message is:</span>
+            <p style="white-space: pre-line;">{{ message }}</p>
+            <textarea v-model="message" placeholder="add multiple lines"></textarea>
+          </div>
         </div>
       </div>
       <div class="row">
@@ -114,6 +159,11 @@
         'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
         'https://unpkg.com/kidlat-css/css/kidlat.css'
       ],
+      customerReserveHandler: [
+        function(win, element) {
+          console.log('Customer function is work.')
+        }
+      ]
     };
 
     Vue.use(VueHtmlToPaper, options);
@@ -143,7 +193,18 @@
               'https://unpkg.com/kidlat-css/css/kidlat.css',
               'public/landscape.css', // must be the path of your public folder
             ]
-          }
+          },
+          inputText: '',
+          picked: '',
+          checkedNames: [],
+          selected: 'A',
+          options: [
+            { text: 'One', value: 'A' },
+            { text: 'Two', value: 'B' },
+            { text: 'Three', value: 'C' }
+          ],
+          message: '',
+          disabled: false
         }
       },
       methods: {

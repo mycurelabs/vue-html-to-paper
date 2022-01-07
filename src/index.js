@@ -8,6 +8,42 @@ function addStyles (win, styles) {
   });
 }
 
+function reserveInputTextValue (win, originalDoc) {
+  const selector = 'input';
+  const originalInputs = originalDoc.querySelectorAll(selector);
+  const copyInputs = win.document.querySelectorAll(selector);
+  for (let i = 0; i < originalInputs.length; i++) {
+    copyInputs[i].value = originalInputs[i].value;
+  }
+}
+
+function reserveInputCheckValue (win, originalDoc) {
+  const selector = 'input[type=checkbox],input[type=radio]';
+  const originalInputs = originalDoc.querySelectorAll(selector);
+  const copyInputs = win.document.querySelectorAll(selector);
+  for (let i = 0; i < originalInputs.length; i++) {
+    copyInputs[i].checked = originalInputs[i].checked;
+  }
+}
+
+function reserveSelect (win, originalDoc) {
+  const selector = 'input[type=select]';
+  const originalInputs = originalDoc.querySelectorAll(selector);
+  const copyInputs = win.document.querySelectorAll(selector);
+  for (let i = 0; i < originalInputs.length; i++) {
+    copyInputs[i].value = originalInputs[i].value;
+  }
+}
+
+function reserveTextArea (win, originalDoc) {
+  const selector = 'textarea';
+  const originalInputs = originalDoc.querySelectorAll(selector);
+  const copyInputs = win.document.querySelectorAll(selector);
+  for (let i = 0; i < originalInputs.length; i++) {
+    copyInputs[i].value = originalInputs[i].value;
+  }
+}
+
 function openWindow (url, name, props) {
   let windowRef = null;
   if (/*@cc_on!@*/false) { // for IE only
@@ -69,6 +105,20 @@ const VueHtmlToPaper = {
       `);
 
       addStyles(win, styles);
+      reserveInputTextValue(win, element);
+      reserveInputCheckValue(win, element);
+      reserveSelect(win, element);
+      reserveTextArea(win, element);
+
+      if (options.customerReserveHandler) {
+        if (Array.isArray(options.customerReserveHandler)) {
+          options.customerReserveHandler.forEach(fn => {
+            fn(win, element);
+          });
+        } else {
+          options.customerReserveHandler(win, element);
+        }
+      }
       
       setTimeout(() => {
         win.document.close();
