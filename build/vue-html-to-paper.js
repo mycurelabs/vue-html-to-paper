@@ -26,7 +26,7 @@
     
   const VueHtmlToPaper = {
     install (Vue, options = {}) {
-      Vue.prototype.$htmlToPaper = (el, localOptions, cb = () => true) => {
+      Vue.config.globalProperties.$htmlToPaper = (el, localOptions, cb = () => true) => {
         let defaultName = '_blank', 
           defaultSpecs = ['fullscreen=yes','titlebar=yes', 'scrollbars=yes'],
           defaultReplace = true,
