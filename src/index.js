@@ -1,3 +1,7 @@
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
 function addStyles (win, styles) {
   styles.forEach(style => {
     let link = win.document.createElement('link');
@@ -10,10 +14,6 @@ function addStyles (win, styles) {
 
 function openWindow (url, name, props) {
   let windowRef = null;
-  if (/*@cc_on!@*/false) { // for IE only
-    windowRef = window.open('', name, props);
-    windowRef.close();
-  }
   windowRef = window.open(url, name, props);
   if (!windowRef.opener) {
     windowRef.opener = self;
@@ -21,11 +21,12 @@ function openWindow (url, name, props) {
   windowRef.focus();
   return windowRef;
 }
-  
+
 const VueHtmlToPaper = {
   install (Vue, options = {}) {
     Vue.prototype.$htmlToPaper = (el, localOptions, cb = () => true) => {
-      let defaultName = '_blank', 
+      console.log(localOptions, el, Vue, options);
+      let defaultName = '_blank',
         defaultSpecs = ['fullscreen=yes','titlebar=yes', 'scrollbars=yes'],
         defaultReplace = true,
         defaultStyles = [];
@@ -34,6 +35,7 @@ const VueHtmlToPaper = {
         specs = defaultSpecs,
         replace = defaultReplace,
         styles = defaultStyles,
+        autoClose = autoClose,
       } = options;
 
       // If has localOptions
@@ -43,6 +45,7 @@ const VueHtmlToPaper = {
         if (localOptions.specs) specs = localOptions.specs;
         if (localOptions.replace) replace = localOptions.replace;
         if (localOptions.styles) styles = localOptions.styles;
+        if (localOptions.autoClose) autoClose = localOptions.autoClose;
       }
 
       specs = !!specs.length ? specs.join(',') : '';
@@ -53,7 +56,7 @@ const VueHtmlToPaper = {
         alert(`Element to print #${el} not found!`);
         return;
       }
-      
+
       const url = '';
       const win = openWindow(url, name, specs);
 
@@ -69,18 +72,24 @@ const VueHtmlToPaper = {
       `);
 
       addStyles(win, styles);
-      
+      if (autoClose) {
+        const setScript = () => setTimeout(function () {window.close();}, 500);
+        const scriptTag = document.createElement("script");
+        scriptTag.innerHTML = `
+          window.onload = ${setScript.toString()};
+        `;
+        win.document.body.appendChild(scriptTag);
+      }
       setTimeout(() => {
         win.document.close();
-        win.focus();
         win.print();
-        setTimeout(function () {window.close();}, 1);
+        win.set;
         cb();
       }, 1000);
-        
+
       return true;
     };
   },
 };
-  
-export default VueHtmlToPaper;
+
+exports.default = VueHtmlToPaper;
