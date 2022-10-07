@@ -24,7 +24,8 @@ function openWindow (url, name, props) {
   
 const VueHtmlToPaper = {
   install (Vue, options = {}) {
-    Vue.prototype.$htmlToPaper = (el, localOptions, cb = () => true) => {
+    let globals = Vue.prototype || Vue.config.globalProperties;
+    globals.$htmlToPaper = (el, localOptions, cb = () => true) => {
       let defaultName = '_blank', 
         defaultSpecs = ['fullscreen=yes','titlebar=yes', 'scrollbars=yes'],
         defaultReplace = true,
