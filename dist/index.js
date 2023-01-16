@@ -85,7 +85,7 @@ const VueHtmlToPaper = {
         win.print();
         win.set;
         cb();
-      }, 1000);
+      }, 1500);
 
       return true;
     };
