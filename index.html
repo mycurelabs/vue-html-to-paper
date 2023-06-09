@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <script src="./build/vue-html-to-paper.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://unpkg.com/kidlat-css/css/kidlat.css">
   <title>Vue Html To Paper - Vue mixin for html elements printing.</title>
 </head>
+
 <body>
   <div id="app">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -103,6 +105,8 @@
     </div>
   </div>
   <script>
+    const { createApp } = Vue;
+
     const options = {
       name: '_blank',
       specs: [
@@ -116,11 +120,8 @@
       ],
     };
 
-    Vue.use(VueHtmlToPaper, options);
-
-    var vm = new Vue({
-      el: '#app',
-      data () {
+    const app = createApp({
+      data() {
         return {
           globalOptions: {
             name: '_blank',
@@ -147,11 +148,11 @@
         }
       },
       methods: {
-        async print () {
-          await vm.$htmlToPaper('printMe');
+        async print() {
+          await this.$htmlToPaper('printMe');
           console.warn('done');
         },
-        async printLandscape () {
+        async printLandscape() {
           const localOptions = {
             styles: [
               'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
@@ -159,37 +160,38 @@
               './landscape.css'
             ]
           };
-          await vm.$htmlToPaper('printMe', localOptions);
+          await this.$htmlToPaper('printMe', localOptions);
           console.warn('done landscape');
         },
-        async printNoStyles () {
+        async printNoStyles() {
           const localOptions = {
             styles: []
           };
-          await vm.$htmlToPaper('printMe', localOptions);
+          await this.$htmlToPaper('printMe', localOptions);
           console.warn('done no styles');
         },
-        async printAutoCloseOff () {
+        async printAutoCloseOff() {
           const localOptions = {
             autoClose: false,
           };
-          await vm.$htmlToPaper('printMe', localOptions);
+          await this.$htmlToPaper('printMe', localOptions);
           console.warn('done');
         },
-        async printCustomWindowTitle () {
+        async printCustomWindowTitle() {
           const localOptions = {
             windowTitle: 'This is custom window title',
           };
-          await vm.$htmlToPaper('printMe', localOptions);
+          await this.$htmlToPaper('printMe', localOptions);
           console.warn('done');
         },
-        printCallback () {
-          vm.$htmlToPaper('printMe', null, () => {
+        printCallback() {
+          this.$htmlToPaper('printMe', null, () => {
             console.warn('done callback');
           });
         },
       },
-    });
+    }).use(VueHtmlToPaper, options).mount('#app');
   </script>
 </body>
+
 </html>
