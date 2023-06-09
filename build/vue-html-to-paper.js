@@ -30,12 +30,15 @@
         let defaultName = '_blank', 
           defaultSpecs = ['fullscreen=yes','titlebar=yes', 'scrollbars=yes'],
           defaultReplace = true,
-          defaultStyles = [];
+          defaultStyles = [],
+          defaultWindowTitle = window.document.title;
         let {
           name = defaultName,
           specs = defaultSpecs,
           replace = defaultReplace,
           styles = defaultStyles,
+          autoClose = true,
+          windowTitle = defaultWindowTitle,
         } = options;
 
         // If has localOptions
@@ -45,6 +48,8 @@
           if (localOptions.specs) specs = localOptions.specs;
           if (localOptions.replace) replace = localOptions.replace;
           if (localOptions.styles) styles = localOptions.styles;
+          if (localOptions.autoClose === false) autoClose = localOptions.autoClose;
+          if (localOptions.windowTitle) windowTitle = localOptions.windowTitle;
         }
 
         specs = !!specs.length ? specs.join(',') : '';
@@ -62,7 +67,7 @@
         win.document.write(`
         <html>
           <head>
-            <title>${window.document.title}</title>
+            <title>${windowTitle || window.document.title}</title>
           </head>
           <body>
             ${element.innerHTML}
@@ -73,10 +78,12 @@
         addStyles(win, styles);
         
         setTimeout(() => {
-          win.document.close();
           win.focus();
           win.print();
-          setTimeout(function () {window.close();}, 1);
+          console.warn('autoClose', autoClose);
+          if (autoClose) {
+            setTimeout(function () {win.close();}, 1);
+          }
           cb();
         }, 1000);
           
