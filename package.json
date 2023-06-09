@@ -1,6 +1,6 @@
 {
   "name": "vue-html-to-paper",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "Vue mixin for printing html elements to paper.",
   "main": "dist/index.js",
   "scripts": {
