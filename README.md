@@ -2,9 +2,10 @@
 
 Vue 3 plugin for printing html elements.
 
+![npm](https://img.shields.io/npm/dw/vue-html-to-paper)
+
 ### Vue 3
 
-![npm](https://img.shields.io/npm/dw/vue-html-to-paper)
 
 [Demo](https://mycurelabs.github.io/vue-html-to-paper/)
 
