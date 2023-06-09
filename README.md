@@ -6,7 +6,7 @@ Vue 3 plugin for printing html elements.
 
 [Demo](https://mycurelabs.github.io/vue-html-to-paper/)
 
-[GitBook Documentation](https://mycure.gitbook.io/mycure-oss/v/vue-html-to-paper/)
+[GitBook Documentation](https://oss.mycure.md/v/vue-html-to-paper/)
 
 Vue 2 is no longer supported, but you can still use the [v1.4.4](https://www.npmjs.com/package/vue-html-to-paper/v/1.4.4)
 
