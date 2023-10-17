@@ -15,10 +15,12 @@ interface Options {
 interface HtmlToPaper {
   (
     id: string | HTMLElement,
-    localOptions: Options,
+    localOptions?: Options,
     callback?: () => void
   ): Promise<void>
 }
+
+export const useHtmlToPaper: HtmlToPaper
 
 export const VueHtmlToPaper: Plugin<Options>
 
