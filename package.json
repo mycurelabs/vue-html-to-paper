@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mycure-inc/vue-html-to-paper.git"
+    "url": "git+https://github.com/mycurelabs/vue-html-to-paper.git"
   },
   "keywords": [
     "html",
@@ -51,7 +51,7 @@
   "author": "Jofferson Ramirez Tiquez",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mycure-inc/vue-html-to-paper/issues"
+    "url": "https://github.com/mycurelabs/vue-html-to-paper/issues"
   },
-  "homepage": "https://github.com/mycure-inc/vue-html-to-paper#readme"
+  "homepage": "https://github.com/mycurelabs/vue-html-to-paper#readme"
 }
