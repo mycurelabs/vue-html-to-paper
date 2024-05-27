@@ -79,6 +79,10 @@
         
         setTimeout(() => {
           win.focus();
+          var element = win.document.getElementsByTagName("grammarly-desktop-integration"), index;
+          for (index = element.length - 1; index >= 0; index--) {
+              element[index].parentNode.removeChild(element[index]);
+          }
           win.print();
           console.warn('autoClose', autoClose);
           if (autoClose) {
