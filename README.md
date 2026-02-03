@@ -1,3 +1,5 @@
+<img width="1280" height="304" alt="banner-vue-html-to-paper" src="https://github.com/user-attachments/assets/8a98b991-f362-4e6c-924f-bf42db08280a" />
+
 # Vue HTML to Paper
 
 Vue 3 plugin for printing html elements.
