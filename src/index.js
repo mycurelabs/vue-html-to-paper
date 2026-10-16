@@ -1,6 +1,30 @@
+const DEFAULT_OPTIONS = {
+  name: '_blank',
+  specs: ['fullscreen=yes', 'titlebar=yes', 'scrollbars=yes'],
+  styles: [],
+  autoClose: true,
+  timeout: 1000,
+  windowTitle: undefined,
+};
+
+// Later sources win, but only for keys they actually define.
+function mergeOptions (...sources) {
+  const merged = {};
+  sources.forEach((source) => {
+    Object.keys(source || {}).forEach((key) => {
+      if (source[key] !== undefined) merged[key] = source[key];
+    });
+  });
+  return merged;
+}
+
+function escapeHtml (text) {
+  return String(text).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+}
+
 function addStyles (win, styles) {
-  styles.forEach(style => {
-    let link = win.document.createElement('link');
+  styles.forEach((style) => {
+    const link = win.document.createElement('link');
     link.setAttribute('rel', 'stylesheet');
     link.setAttribute('type', 'text/css');
     link.setAttribute('href', style);
@@ -9,85 +33,105 @@ function addStyles (win, styles) {
 }
 
 function openWindow (url, name, props) {
-  let windowRef = null;
-  if (/*@cc_on!@*/false) { // for IE only
-    windowRef = window.open('', name, props);
-    windowRef.close();
-  }
-  windowRef = window.open(url, name, props);
+  const windowRef = window.open(url, name, props);
+  if (!windowRef) return null;
   if (!windowRef.opener) {
     windowRef.opener = self;
   }
   windowRef.focus();
   return windowRef;
 }
-  
+
+function resolveElement (el) {
+  if (typeof el === 'string') return window.document.getElementById(el);
+  // A component instance (Vue 2/3 template ref on a component) or an element.
+  return (el && el.$el) || el || null;
+}
+
+// Returns a print function bound to `globalOptions`. Each call resolves to
+// true once printed (after `cb` ran), or false if nothing could be printed.
+function createHtmlToPaper (globalOptions = {}) {
+  return (el, localOptions, cb = () => true) => new Promise((resolve) => {
+    const {
+      name,
+      specs,
+      styles,
+      autoClose,
+      timeout,
+      windowTitle,
+    } = mergeOptions(DEFAULT_OPTIONS, globalOptions, localOptions);
+
+    const element = resolveElement(el);
+
+    if (!element) {
+      alert(typeof el === 'string' ? `Element to print #${el} not found!` : 'Element to print not found!');
+      resolve(false);
+      return;
+    }
+
+    const win = openWindow('', name, specs.length ? specs.join(',') : '');
+
+    if (!win) {
+      console.error('[vue-html-to-paper] window.open() was blocked; allow pop-ups for this site to print.');
+      resolve(false);
+      return;
+    }
+
+    win.document.write(`<!DOCTYPE html>
+      <html>
+        <head>
+          <title>${escapeHtml(windowTitle || window.document.title)}</title>
+        </head>
+        <body>
+          ${element.innerHTML}
+        </body>
+      </html>
+    `);
+
+    addStyles(win, styles);
+
+    // Without this Chrome treats the popup as still loading and never
+    // opens the print dialog (mycurelabs/vue-html-to-paper#126).
+    win.document.close();
+
+    setTimeout(() => {
+      win.focus();
+      win.print();
+      if (autoClose) {
+        setTimeout(() => win.close(), 1);
+      }
+      cb();
+      resolve(true);
+    }, timeout);
+  });
+}
+
+// Print function from the most recent install(); defaults until then.
+let installedHtmlToPaper = createHtmlToPaper();
+
+// Standalone print function using only the default options.
+export const htmlToPaper = createHtmlToPaper();
+
+// Composition API access (Vue 2.7 / Vue 3 setup()) to the print function
+// configured by app.use(VueHtmlToPaper, options) / Vue.use(...).
+export function useHtmlToPaper () {
+  return installedHtmlToPaper;
+}
+
 const VueHtmlToPaper = {
+  // `app` is a Vue 3 app (app.use) or the Vue 2 constructor (Vue.use).
   install (app, options = {}) {
-    app.config.globalProperties.$htmlToPaper = (el, localOptions, cb = () => true) => {
-      let defaultName = '_blank', 
-        defaultSpecs = ['fullscreen=yes','titlebar=yes', 'scrollbars=yes'],
-        defaultReplace = true,
-        defaultStyles = [],
-        defaultWindowTitle = window.document.title;
-      let {
-        name = defaultName,
-        specs = defaultSpecs,
-        replace = defaultReplace,
-        styles = defaultStyles,
-        autoClose = true,
-        windowTitle = defaultWindowTitle,
-      } = options;
+    const print = createHtmlToPaper(options);
+    installedHtmlToPaper = print;
 
-      // If has localOptions
-      // TODO: improve logic
-      if (!!localOptions) {
-        if (localOptions.name) name = localOptions.name;
-        if (localOptions.specs) specs = localOptions.specs;
-        if (localOptions.replace) replace = localOptions.replace;
-        if (localOptions.styles) styles = localOptions.styles;
-        if (localOptions.autoClose === false) autoClose = localOptions.autoClose;
-        if (localOptions.windowTitle) windowTitle = localOptions.windowTitle;
-      }
-
-      specs = !!specs.length ? specs.join(',') : '';
-
-      const element = window.document.getElementById(el);
-
-      if (!element) {
-        alert(`Element to print #${el} not found!`);
-        return;
-      }
-      
-      const url = '';
-      const win = openWindow(url, name, specs);
-
-      win.document.write(`
-        <html>
-          <head>
-            <title>${windowTitle || window.document.title}</title>
-          </head>
-          <body>
-            ${element.innerHTML}
-          </body>
-        </html>
-      `);
-
-      addStyles(win, styles);
-      
-      setTimeout(() => {
-        win.focus();
-        win.print();
-        console.warn('autoClose', autoClose);
-        if (autoClose) {
-          setTimeout(function () {win.close();}, 1);
-        }
-        cb();
-      }, 1000);
-        
-      return true;
-    };
+    if (app.config && app.config.globalProperties) {
+      app.config.globalProperties.$htmlToPaper = print;
+      app.provide('htmlToPaper', print);
+    } else {
+      app.prototype.$htmlToPaper = print;
+    }
   },
 };
-  
+
+export { VueHtmlToPaper };
 export default VueHtmlToPaper;

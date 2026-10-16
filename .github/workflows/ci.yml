@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 24]
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.0.0
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npx eslint .
+      - name: Unit tests (Vue 3.5, Vue 2.7, Vue 2.6)
+        run: npm test
+      - name: Type tests (Vue 3, Vue 2.7)
+        run: npm run test:types
+      - run: npm run build
+      - name: Committed dist/, build/ and types/ match the source
+        run: git diff --exit-code -- dist build types
+      - name: Bundle smoke test (ESM, CJS, UMD)
+        run: npm run test:smoke
+      - name: Package exports and types (arethetypeswrong)
+        run: npm run test:package

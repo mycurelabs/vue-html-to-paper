@@ -5,11 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="https://unpkg.com/vue@3.5.43/dist/vue.global.prod.js"></script>
   <script src="./build/vue-html-to-paper.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://unpkg.com/kidlat-css/css/kidlat.css">
-  <title>Vue Html To Paper - Vue mixin for html elements printing.</title>
+  <title>Vue Html To Paper - Vue 2 and Vue 3 plugin for printing html elements.</title>
 </head>
 
 <body>
@@ -23,7 +23,7 @@
       </ul>
     </nav>
     <div class="container">
-      <div id="printMe" class="row">
+      <div id="printMe" ref="printMe" class="row">
         <div class="col-xs-12 col-md-10 offset-md-1 pt-5">
           <h1 align="center">MYCURE Pets</h1>
           <div class="table-responsive">
@@ -101,6 +101,20 @@
           <h4>Callback</h4>
           <button class="btn btn-outline-primary" @click="printCallback">PRINT CALLBACK</button>
         </div>
+        <div class="col-xs-12 col-md-10 offset-md-1 mb-5">
+          <h4>Template ref</h4>
+          <p>Pass an element (or component) instead of an id.</p>
+          <button class="btn btn-outline-primary" @click="printRef">PRINT TEMPLATE REF</button>
+        </div>
+        <div class="col-xs-12 col-md-10 offset-md-1 mb-5">
+          <h4>Composition API</h4>
+          <p><code>const print = useHtmlToPaper()</code> inside <code>setup()</code> (Vue 2.7 / Vue 3).</p>
+          <button class="btn btn-outline-primary" @click="printComposable">PRINT WITH useHtmlToPaper()</button>
+        </div>
+        <div class="col-xs-12 col-md-10 offset-md-1 mb-5">
+          <h4>Result</h4>
+          <pre id="log">{{ log.join('\n') || 'Click a button above.' }}</pre>
+        </div>
       </div>
     </div>
   </div>
@@ -118,39 +132,33 @@
         'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
         'https://unpkg.com/kidlat-css/css/kidlat.css'
       ],
+      timeout: 1000,
+      autoClose: true,
+      windowTitle: window.document.title, // whatever's the window title of the opener
     };
 
     const app = createApp({
+      setup() {
+        const print = VueHtmlToPaper.useHtmlToPaper();
+        return { printWithComposable: () => print('printMe') };
+      },
       data() {
         return {
-          globalOptions: {
-            name: '_blank',
-            specs: [
-              'fullscreen=yes',
-              'titlebar=yes',
-              'scrollbars=yes'
-            ],
-            styles: [
-              'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
-              'https://unpkg.com/kidlat-css/css/kidlat.css'
-            ],
-            timeout: 1000,
-            autoClose: true,
-            windowTitle: window.document.title, // whatever's the window title of the opener
-          },
+          globalOptions: options,
           localLandScapeOptions: {
             styles: [
               'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
               'https://unpkg.com/kidlat-css/css/kidlat.css',
-              'public/landscape.css', // must be the path of your public folder
+              './landscape.css', // must be served by your app, e.g. from its public folder
             ]
-          }
+          },
+          log: [],
         }
       },
       methods: {
         async print() {
           await this.$htmlToPaper('printMe');
-          console.warn('done');
+          this.log.push('done');
         },
         async printLandscape() {
           const localOptions = {
@@ -161,33 +169,41 @@
             ]
           };
           await this.$htmlToPaper('printMe', localOptions);
-          console.warn('done landscape');
+          this.log.push('done landscape');
         },
         async printNoStyles() {
           const localOptions = {
             styles: []
           };
           await this.$htmlToPaper('printMe', localOptions);
-          console.warn('done no styles');
+          this.log.push('done no styles');
         },
         async printAutoCloseOff() {
           const localOptions = {
             autoClose: false,
           };
           await this.$htmlToPaper('printMe', localOptions);
-          console.warn('done');
+          this.log.push('done');
         },
         async printCustomWindowTitle() {
           const localOptions = {
             windowTitle: 'This is a custom window title',
           };
           await this.$htmlToPaper('printMe', localOptions);
-          console.warn('done');
+          this.log.push('done');
         },
         printCallback() {
           this.$htmlToPaper('printMe', null, () => {
-            console.warn('done callback');
+            this.log.push('done callback');
           });
+        },
+        async printRef() {
+          const printed = await this.$htmlToPaper(this.$refs.printMe);
+          this.log.push(`done template ref -> ${printed}`);
+        },
+        async printComposable() {
+          const printed = await this.printWithComposable();
+          this.log.push(`done useHtmlToPaper() -> ${printed}`);
         },
       },
     }).use(VueHtmlToPaper, options).mount('#app');

@@ -1,28 +1,52 @@
 {
   "name": "vue-html-to-paper",
   "version": "2.0.3",
-  "description": "Vue mixin for printing html elements to paper.",
+  "description": "Vue 2 and Vue 3 plugin for printing html elements to paper.",
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "types": "types/index.d.ts",
+  "unpkg": "build/vue-html-to-paper.min.js",
+  "jsdelivr": "build/vue-html-to-paper.min.js",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./types/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./types/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./dist/*": "./dist/*",
+    "./build/*": "./build/*",
+    "./package.json": "./package.json"
+  },
   "files": [
     "dist",
+    "build",
     "types"
   ],
+  "sideEffects": false,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint --fix --ext .js --ignore-path .gitignore .",
-    "prebuild:webpack": "rm -rf dist",
-    "prebuild:rollup": "rm -rf build",
-    "build:webpack": "webpack --progress",
-    "build:rollup": "rollup -c",
-    "build:all": "npm run build:webpack && npm run build:rollup",
-    "build": "npm run build:rollup"
+    "lint": "eslint --fix .",
+    "prebuild": "rm -rf dist build",
+    "build": "rollup -c && cp types/index.d.ts types/index.d.mts",
+    "test:smoke": "node scripts/smoke.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:types": "tsc -p test/types/vue3 && tsc -p test/types/vue2",
+    "test:package": "attw --pack ."
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mycure-inc/vue-html-to-paper.git"
+    "url": "git+https://github.com/mycurelabs/vue-html-to-paper.git"
   },
   "keywords": [
+    "vue",
+    "vue2",
+    "vue3",
+    "nuxt",
     "html",
     "printing",
     "element",
@@ -30,28 +54,27 @@
     "print element"
   ],
   "devDependencies": {
-    "@babel/core": "^7.14.0",
-    "@babel/plugin-proposal-optional-chaining": "^7.13.12",
-    "@babel/preset-env": "^7.14.1",
-    "babel-eslint": "^10.1.0",
-    "babel-loader": "^8.2.2",
-    "compression-webpack-plugin": "^1.0.0",
-    "css-loader": "^0.28.4",
-    "eslint": "^7.25.0",
-    "rollup": "^2.47.0",
-    "style-loader": "^0.18.2",
-    "terser-webpack-plugin": "^5.1.1",
-    "uglify-loader": "^2.0.0",
-    "webpack-cli": "^4.6.0",
-    "webpack": "^5.36.2"
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@eslint/js": "^10.0.1",
+    "@rollup/plugin-terser": "^1.0.0",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "eslint": "^10.11.0",
+    "globals": "^17.13.0",
+    "jsdom": "^30.1.1",
+    "rollup": "^4.63.6",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3",
+    "vue": "^3.5.43",
+    "vue2": "npm:vue@^2.7.16",
+    "vue26": "npm:vue@2.6.14"
   },
   "peerDependencies": {
-    "vue": "^3.0.0"
+    "vue": "^2.6.0 || ^3.0.0"
   },
   "author": "Jofferson Ramirez Tiquez",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mycure-inc/vue-html-to-paper/issues"
+    "url": "https://github.com/mycurelabs/vue-html-to-paper/issues"
   },
-  "homepage": "https://github.com/mycure-inc/vue-html-to-paper#readme"
+  "homepage": "https://github.com/mycurelabs/vue-html-to-paper#readme"
 }
